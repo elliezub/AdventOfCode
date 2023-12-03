@@ -10,11 +10,8 @@ puzzle_input = open("puzzle-input.txt", "r")
 
 organized_games = {}
 
-possible_games_sum = 0
+total_power_sum = 0
 game_number = 0
-max_red = 12
-max_green = 13
-max_blue = 14
 
 for line in puzzle_input:
     game_number += 1
@@ -34,23 +31,27 @@ for line in puzzle_input:
 
     organized_games[game_number] = individual_rounds # add colors and counts here
 
+# For each game in organized games:
+#     For each round in game:
+#       For each color in the round:
+#         Update all colors to the max val in that round
+
 for game_num in organized_games:
+    min_red = 0
+    min_green = 0
+    min_blue = 0
+
     for game in organized_games[game_num]:
-        game_possible = True
-        
         for color in game:
-            if (color == "red" and game[color] > max_red) or \
-               (color == "green" and game[color] > max_green) or \
-               (color == 'blue' and game[color] > max_blue):
-                game_possible = False
-                break 
+            if color == "red" and game[color] > min_red:
+                min_red = game[color]
+            if color == "green" and game[color] > min_green:
+                min_green = game[color]
+            if color == "blue" and game[color] > min_blue:
+                min_blue = game[color]
 
-        if not game_possible:
-            break
+    total_power_sum += min_red * min_blue * min_green
 
-    if game_possible == True:
-        possible_games_sum += game_num
-    
-print(possible_games_sum)
+print(total_power_sum)
 
 puzzle_input.close()
